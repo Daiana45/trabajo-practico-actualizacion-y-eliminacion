@@ -2,15 +2,9 @@ import { matchedData } from "express-validator";
 
 import { UserModel } from "../models/user.model.js";
 
-// ======================================================
-// CREAR USUARIO
-// POST /api/users
-// ======================================================
-
+// Crear usuario
 export const createUser = async (req, res) => {
   try {
-    // matchedData obtiene solamente los datos que
-    // fueron validados por express-validator.
     const validatedData = matchedData(req);
 
     const user = await UserModel.create(validatedData);
@@ -28,17 +22,9 @@ export const createUser = async (req, res) => {
   }
 };
 
-// ======================================================
-// OBTENER TODOS LOS USUARIOS
-// GET /api/users
-// ======================================================
-
+// Obtener todos los usuarios
 export const getAllUsers = async (req, res) => {
   try {
-    // findAll utiliza las consultas normales de Sequelize.
-    //
-    // Si un modelo tiene paranoid:true, los registros
-    // eliminados lógicamente quedan excluidos automáticamente.
     const users = await UserModel.findAll();
 
     return res.status(200).json(users);
@@ -51,11 +37,7 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-// ======================================================
-// OBTENER USUARIO POR ID
-// GET /api/users/:id
-// ======================================================
-
+// Obtener usuario por ID
 export const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -78,49 +60,32 @@ export const getUserById = async (req, res) => {
   }
 };
 
-// ======================================================
-// ACTUALIZAR USUARIO
-// PUT /api/users/:id
-// ======================================================
-
+// Actualizar usuario
 export const updateUser = async (req, res) => {
   try {
-    // Obtenemos el ID desde la URL.
-    const { id } = req.params;
+    const validatedData = matchedData(req, {
+      locations: ["body"],
+    });
 
-    // Buscamos el usuario.
+    const { id } = matchedData(req, {
+      locations: ["params"],
+    });
+
     const user = await UserModel.findByPk(id);
 
-    // Si no existe...
     if (!user) {
       return res.status(404).json({
         message: "Usuario no encontrado",
       });
     }
 
-    // ==================================================
-    // matchedData()
-    // ==================================================
-    //
-    // Obtiene solamente los campos del BODY que pasaron
-    // las validaciones.
-    //
-    // Esto evita pasar datos inesperados directamente
-    // desde req.body al modelo.
-    //
-
-    const validatedData = matchedData(req, {
-      locations: ["body"],
-    });
-
-    // No permitimos una actualización vacía.
+    // Evita hacer un update sin datos
     if (Object.keys(validatedData).length === 0) {
       return res.status(400).json({
         message: "Debe enviar al menos un campo para actualizar",
       });
     }
 
-    // Actualizamos solamente los datos validados.
     await user.update(validatedData);
 
     return res.status(200).json({
@@ -136,11 +101,7 @@ export const updateUser = async (req, res) => {
   }
 };
 
-// ======================================================
-// ELIMINAR USUARIO
-// DELETE /api/users/:id
-// ======================================================
-
+// Eliminar usuario
 export const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -153,11 +114,7 @@ export const deleteUser = async (req, res) => {
       });
     }
 
-    // destroy() normalmente eliminaría el registro.
-    //
-    // Pero en este caso UserModel no tiene paranoid.
-    //
-    // Por eso esta eliminación es física.
+    // UserModel no tiene paranoid, por lo que se elimina de la tabla
     await user.destroy();
 
     return res.status(200).json({

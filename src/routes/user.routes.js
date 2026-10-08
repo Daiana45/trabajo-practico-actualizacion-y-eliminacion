@@ -14,65 +14,39 @@ import {
   createUserValidation,
   updateUserValidation,
   idValidation,
-} from "../middlewares/validations/user.validation.js";
+} from "../middlewares/validations/user.validate.js";
 
-// Creamos el router.
-export const userRouter = Router();
-
-// ======================================================
-// CREAR
-// POST /api/users
-// ======================================================
+export const userRouter = Router(); // crea el router donde se agrupan las rutas de usuarios
 
 userRouter.post(
   "/users",
-  createUserValidation,
-  validate,
-  createUser,
+  createUserValidation, // valida los datos enviados para crear el usuario
+  validate, // comprueba si hubo errores en las validaciones
+  createUser, // crea el usuario si los datos son correctos
 );
-
-// ======================================================
-// OBTENER TODOS
-// GET /api/users
-// ======================================================
 
 userRouter.get(
   "/users",
-  getAllUsers,
+  getAllUsers, // obtiene todos los usuarios
 );
-
-// ======================================================
-// OBTENER UNO
-// GET /api/users/:id
-// ======================================================
 
 userRouter.get(
   "/users/:id",
-  idValidation,
-  validate,
-  getUserById,
+  idValidation, // valida el id recibido en la url
+  validate, // comprueba si el id tiene errores
+  getUserById, // busca el usuario correspondiente al id
 );
-
-// ======================================================
-// ACTUALIZAR
-// PUT /api/users/:id
-// ======================================================
 
 userRouter.put(
   "/users/:id",
-  updateUserValidation,
-  validate,
-  updateUser,
+  updateUserValidation, // valida el id y los campos enviados para modificar
+  validate, // comprueba el resultado de las validaciones
+  updateUser, // actualiza el usuario
 );
-
-// ======================================================
-// ELIMINAR
-// DELETE /api/users/:id
-// ======================================================
 
 userRouter.delete(
   "/users/:id",
-  idValidation,
-  validate,
-  deleteUser,
+  idValidation, // valida el id antes de eliminar
+  validate, // comprueba si hay errores
+  deleteUser, // elimina el usuario
 );

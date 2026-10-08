@@ -4,10 +4,6 @@ import { PersonModel } from "../models/person.model.js";
 import { TaskModel } from "../models/task.model.js";
 import { UserModel } from "../models/user.model.js";
 
-// ======================================================
-// CREAR TAREA
-// POST /api/tasks
-// ======================================================
 
 export const createTask = async (req, res) => {
   try {
@@ -28,10 +24,6 @@ export const createTask = async (req, res) => {
   }
 };
 
-// ======================================================
-// OBTENER TODAS LAS TAREAS
-// GET /api/tasks
-// ======================================================
 
 export const getAllTasks = async (req, res) => {
   try {
@@ -39,7 +31,7 @@ export const getAllTasks = async (req, res) => {
       attributes: {
         exclude: ["user_id"],
       },
-
+//se usa personmodel
       include: [
         {
           model: UserModel,
@@ -68,11 +60,6 @@ export const getAllTasks = async (req, res) => {
     });
   }
 };
-
-// ======================================================
-// OBTENER TAREA POR ID
-// GET /api/tasks/:id
-// ======================================================
 
 export const getTaskById = async (req, res) => {
   try {
@@ -107,10 +94,6 @@ export const getTaskById = async (req, res) => {
   }
 };
 
-// ======================================================
-// ACTUALIZAR TAREA
-// PUT /api/tasks/:id
-// ======================================================
 
 export const updateTask = async (req, res) => {
   try {
@@ -124,10 +107,9 @@ export const updateTask = async (req, res) => {
       });
     }
 
-    // Solamente obtenemos los datos enviados
-    // y validados.
+    // Solamente obtenemos los datos enviados y validados.
     const validatedData = matchedData(req, {
-      locations: ["body"],
+      locations: ["body"], //de todo lo valdo, dame solamente lo que vino en el body
     });
 
     if (Object.keys(validatedData).length === 0) {
@@ -151,10 +133,6 @@ export const updateTask = async (req, res) => {
   }
 };
 
-// ======================================================
-// ELIMINAR TAREA
-// DELETE /api/tasks/:id
-// ======================================================
 
 export const deleteTask = async (req, res) => {
   try {
@@ -168,7 +146,7 @@ export const deleteTask = async (req, res) => {
       });
     }
 
-    await task.destroy();
+    await task.destroy(); //solo hace el borrado logico si en el model esta paranoid: true;
 
     return res.status(200).json({
       message: "Tarea eliminada correctamente",

@@ -14,65 +14,39 @@ import {
   createPersonValidation,
   updatePersonValidation,
   idValidation,
-} from "../middlewares/validations/person.validation.js";
+} from "../middlewares/validations/person.validate.js";
 
-// Router de personas.
-export const personRouter = Router();
-
-// ======================================================
-// CREAR
-// POST /api/people
-// ======================================================
+export const personRouter = Router(); // crea el router donde se agrupan las rutas de personas
 
 personRouter.post(
   "/people",
-  createPersonValidation,
-  validate,
-  createPerson,
+  createPersonValidation, // valida los datos enviados para crear la persona
+  validate, // revisa si las validaciones anteriores encontraron errores
+  createPerson, // si todo está correcto, ejecuta el controlador
 );
-
-// ======================================================
-// OBTENER TODOS
-// GET /api/people
-// ======================================================
 
 personRouter.get(
   "/people",
-  getAllPeople,
+  getAllPeople, // obtiene todas las personas
 );
-
-// ======================================================
-// OBTENER UNO
-// GET /api/people/:id
-// ======================================================
 
 personRouter.get(
   "/people/:id",
-  idValidation,
-  validate,
-  getPersonById,
+  idValidation, // comprueba que el id recibido en la url sea válido
+  validate, // detiene la petición si el id tiene errores
+  getPersonById, // busca la persona usando ese id
 );
-
-// ======================================================
-// ACTUALIZAR
-// PUT /api/people/:id
-// ======================================================
 
 personRouter.put(
   "/people/:id",
-  updatePersonValidation,
-  validate,
-  updatePerson,
+  updatePersonValidation, // valida el id y los campos que se quieren modificar
+  validate, // comprueba el resultado de las validaciones
+  updatePerson, // actualiza la persona si los datos son correctos
 );
-
-// ======================================================
-// ELIMINACIÓN LÓGICA
-// DELETE /api/people/:id
-// ======================================================
 
 personRouter.delete(
   "/people/:id",
-  idValidation,
-  validate,
-  deletePerson,
+  idValidation, // valida el id antes de intentar eliminar
+  validate, // comprueba si hubo errores
+  deletePerson, // realiza la eliminación lógica
 );

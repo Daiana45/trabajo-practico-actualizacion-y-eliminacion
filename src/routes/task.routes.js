@@ -14,65 +14,39 @@ import {
   createTaskValidation,
   updateTaskValidation,
   idValidation,
-} from "../middlewares/validations/task.validation.js";
+} from "../middlewares/validations/task.validate.js";
 
-// Router de tareas.
-export const taskRouter = Router();
-
-// ======================================================
-// CREAR
-// POST /api/tasks
-// ======================================================
+export const taskRouter = Router(); // crea el router donde se agrupan las rutas de tareas
 
 taskRouter.post(
   "/tasks",
-  createTaskValidation,
-  validate,
-  createTask,
+  createTaskValidation, // valida los datos necesarios para crear la tarea
+  validate, // revisa si las validaciones encontraron errores
+  createTask, // crea la tarea si los datos son correctos
 );
-
-// ======================================================
-// OBTENER TODAS
-// GET /api/tasks
-// ======================================================
 
 taskRouter.get(
   "/tasks",
-  getAllTasks,
+  getAllTasks, // obtiene todas las tareas
 );
-
-// ======================================================
-// OBTENER UNA
-// GET /api/tasks/:id
-// ======================================================
 
 taskRouter.get(
   "/tasks/:id",
-  idValidation,
-  validate,
-  getTaskById,
+  idValidation, // comprueba que el id recibido en la url sea válido
+  validate, // detiene la petición si el id tiene errores
+  getTaskById, // busca la tarea correspondiente al id
 );
-
-// ======================================================
-// ACTUALIZAR
-// PUT /api/tasks/:id
-// ======================================================
 
 taskRouter.put(
   "/tasks/:id",
-  updateTaskValidation,
-  validate,
-  updateTask,
+  updateTaskValidation, // valida el id y los campos que se quieren modificar
+  validate, // comprueba el resultado de las validaciones
+  updateTask, // actualiza la tarea si todo es correcto
 );
-
-// ======================================================
-// ELIMINAR
-// DELETE /api/tasks/:id
-// ======================================================
 
 taskRouter.delete(
   "/tasks/:id",
-  idValidation,
-  validate,
-  deleteTask,
+  idValidation, // valida el id antes de eliminar la tarea
+  validate, // comprueba si hubo errores de validación
+  deleteTask, // elimina la tarea
 );

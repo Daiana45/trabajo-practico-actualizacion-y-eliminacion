@@ -2,19 +2,15 @@ import { DataTypes } from "sequelize";
 
 import { sequelize } from "../config/database.js";
 
-// ======================================================
-// MODELO ROLE
-// ======================================================
-
 export const RoleModel = sequelize.define(
   "Role",
   {
     rolename: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
+      type: DataTypes.STRING(100), // guarda el nombre del rol, con un máximo de 100 caracteres
+      allowNull: false, // obliga a que el rol tenga un nombre
     },
   },
   {
-    timestamps: false,
+    timestamps: false, // no crea createdAt ni updatedAt para esta tabla
   },
 );

@@ -2,11 +2,8 @@ import { matchedData } from "express-validator";
 
 import { PersonModel } from "../models/person.model.js";
 
-// ======================================================
-// CREAR PERSONA
-// POST /api/people
-// ======================================================
-
+// crear a la persona
+// post /api/people
 export const createPerson = async (req, res) => {
   try {
     const validatedData = matchedData(req);
@@ -26,16 +23,16 @@ export const createPerson = async (req, res) => {
   }
 };
 
-// ======================================================
-// OBTENER TODAS LAS PERSONAS
-// GET /api/people
-// ======================================================
-
+// obtener a todas las personas
+// get /api/people
 export const getAllPeople = async (req, res) => {
   try {
     // Como Person tiene paranoid:true,
     // los registros eliminados lógicamente NO aparecen.
-    const people = await PersonModel.findAll();
+    const people = await PersonModel.findAll({
+      paranoid: false, //para que venga el dato que se elimino
+  });
+  //findAll() personas activas findAll({paranoid: false}) personas activas y personas eliminadas logicamente
 
     return res.status(200).json(people);
   } catch (error) {
@@ -47,10 +44,7 @@ export const getAllPeople = async (req, res) => {
   }
 };
 
-// ======================================================
-// OBTENER PERSONA POR ID
-// GET /api/people/:id
-// ======================================================
+// get /api/people/:id
 
 export const getPersonById = async (req, res) => {
   try {
@@ -74,10 +68,7 @@ export const getPersonById = async (req, res) => {
   }
 };
 
-// ======================================================
-// ACTUALIZAR PERSONA
-// PUT /api/people/:id
-// ======================================================
+// put /api/people/:id
 
 export const updatePerson = async (req, res) => {
   try {
@@ -91,8 +82,7 @@ export const updatePerson = async (req, res) => {
       });
     }
 
-    // Obtenemos únicamente los campos enviados
-    // y validados.
+    // Obtenemos únicamente los campos enviados y validados.
     const validatedData = matchedData(req, {
       locations: ["body"],
     });
@@ -118,10 +108,7 @@ export const updatePerson = async (req, res) => {
   }
 };
 
-// ======================================================
-// ELIMINACIÓN LÓGICA
-// DELETE /api/people/:id
-// ======================================================
+// delete /api/people/:id
 
 export const deletePerson = async (req, res) => {
   try {
@@ -135,19 +122,7 @@ export const deletePerson = async (req, res) => {
       });
     }
 
-    // ==================================================
-    // ELIMINACIÓN LÓGICA
-    // ==================================================
-    //
-    // Person tiene:
-    //
-    // paranoid: true
-    //
-    // Por eso destroy() NO elimina físicamente.
-    //
-    // Sequelize coloca la fecha de eliminación
-    // en deletedAt.
-    //
+    // Person tiene: paranoid: true por eso destroy() no elimina físicamente.Sequelize coloca la fecha de eliminación en deletedAt.
 
     await person.destroy();
 

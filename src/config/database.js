@@ -1,29 +1,20 @@
 import { Sequelize } from "sequelize";
 
-// ======================================================
-// CONEXIÓN A MYSQL
-// ======================================================
-//
+// conexion a mysql
 // Sequelize recibe:
-// 1. nombre de la base de datos
-// 2. usuario
-// 3. contraseña
-// 4. configuración del servidor
-//
+//  nombre de la base de datos
+// usuario
+// contraseña
+// configuración del servidor
 
-export const sequelize = new Sequelize(
-  "tasks_users_db",
-  "root",
-  "",
-  {
+export const sequelize = new Sequelize("tasks_users_db","root","", {
     host: "localhost",
     dialect: "mysql",
   },
 );
 
-// ======================================================
-// INICIAR BASE DE DATOS
-// ======================================================
+
+// Iniciar la base de datos
 
 export const startDB = async () => {
   try {
@@ -31,11 +22,7 @@ export const startDB = async () => {
     await sequelize.authenticate();
 
     // Actualiza la estructura de las tablas sin eliminarlas.
-    //
-    // IMPORTANTE:
-    // No usamos force: true porque force elimina las tablas
-    // y vuelve a crearlas cada vez que iniciamos el servidor.
-    await sequelize.sync({
+    await sequelize.sync({ //esto le permite a sequelize comparar los modelos actuales con las tablas existentes e intentar ajustar la estructura sin borrar directamente la tablas como hace force: true
       alter: true,
     });
 
@@ -44,3 +31,7 @@ export const startDB = async () => {
     console.error("No se pudo conectar a la db:", error);
   }
 };
+
+//sync() → sincroniza sin forzar cambios destructivos
+//sync({ alter: true }) → intenta modificar las tablas existentes para que coincidan con los modelos
+//sync({ force: true }) → elimina las tablas y las vuelve a crear

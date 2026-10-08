@@ -1,37 +1,21 @@
 import { validationResult } from "express-validator";
 
-// ======================================================
-// MIDDLEWARE DE VALIDACIÓN
-// ======================================================
-//
-// Revisa todos los errores generados por
-// express-validator.
-//
-// Si encuentra errores:
-//    devuelve 400.
-//
-// Si no encuentra errores:
-//    continúa con el controlador.
-//
-
 export const validate = (req, res, next) => {
-  const errors = validationResult(req);
+  const errors = validationResult(req); // obtiene los errores de las validaciones anteriores
 
-  // Si hay errores de validación...
-  if (!errors.isEmpty()) {
-    const custom = errors.formatWith((error) => {
+  if (!errors.isEmpty()) { // comprueba si existe algún error
+    const custom = errors.formatWith((error) => { // cambia el formato de cada error
       return {
-        campo: error.path,
-        mensaje: error.msg,
+        campo: error.path, // indica qué campo produjo el error
+        mensaje: error.msg, // obtiene el mensaje definido en withMessage()
       };
     });
 
-    return res.status(400).json({
+    return res.status(400).json({ // devuelve un error 400 y detiene la ejecución
       message: "Error de validacion",
-      errors: custom.array(),
+      errors: custom.array(), // convierte los errores en un array para enviarlos como respuesta
     });
   }
 
-  // Si todo está correcto, continuamos.
-  next();
+  next(); // si no hay errores, pasa al siguiente middleware o controlador
 };
